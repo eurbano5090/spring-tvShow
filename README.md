@@ -1,4 +1,4 @@
-App Tv Shows
+# :globe_with_meridians:App Tv Shows:computer:
 <ol>
 <li>:heavy_check_mark:Pagina creada en Springboot con dependencias Jpa, Web, thymeleaf, security, devtools,Postgresql</li>
 <li>:heavy_check_mark:Esta creada para mostrar y buscar empleos dentro de la pagina</li>
