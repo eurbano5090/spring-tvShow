@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org./1999/" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="ISO-8859-1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"
+    integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lobster&family=Lobster+Two&family=Open+Sans:wght@300&family=Poppins:wght@200;300;600&family=Roboto:wght@300&display=swap"
+    rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <title>Listado de Categorias</title>
+ </head>
+  <body>
+
+   <header th:replace="~{layout/layout :: header}"></header>
+
+    <main>  
+      <hr>
+      <div class="container-fluid col-12 my-5">
+
+        <div class="actores container col-12 card">
+          <h4 class="list card-header"><strong>Listado de Categorías</strong></h4>              
+          <div class="card-body">
+            <a class="btn btn-primary" th:href="@{/categorias/create}" role="button"><i class="fas fa-file" aria-hidden="true"></i> Nueva</a>            
+            <hr>
+            <div th:if="${msg!=null}"class="alert alert-success" th:text="${msg}" roles="alert"></div>
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Operaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+				  <tr th:each="cat:${categorias}">
+               
+                 <td th:text="${cat.id}"></th>
+                 <td th:text="${cat.nombre}"></td>
+                 <td th:text="${cat.descripcion}"></td>
+                  <td>
+                    <a th:href="@{/categorias/edit/} + ${cat.id}" class="btn btn-success btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                    <a th:href="@{/categorias/delete/} + ${cat.id}" class="btn btn-danger btn-sm confirmar" role="button" title="Eliminar"><i class="fas fa-trash" aria-hidden="true"></i></a>
+                  </td>
+                </tr>
+                
+               
+                               
+              </tbody>
+            </table>
+            
+            <nav th:if="${categorias.totalPages > 0}" aria-label="Page navigation example" >
+	<ul class="pagination justify-content-center">
+		<li class="page-item" th:classappend="${categorias.number == 0 ? 'disabled' : ''}">
+			<a th:href="@{/categorias/indexPaginate(page=${categorias.number - 1})}" class="page-link">Anterior</a>
+		</li>
+					
+		<li class="page-item" th:classappend="${i eq categorias.number + 1} ? 'active'" th:each="i : ${#numbers.sequence( 1, categorias.totalPages, 1)}">
+			<a class="page-link" th:href="@{/categorias/indexPaginate?page={tmpPag} (tmpPag=${i-1}) }" th:text="${i}" th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+		</li>
+		<li class="page-item" th:classappend="${categorias.number == (categorias.totalPages - 1) ? 'disabled' : ''}">
+			<a th:href="@{/categorias/indexPaginate(page=${categorias.number + 1})}" class="page-link">Siguiente</a>
+		</li>
+	</ul>
+</nav>
+          </div>
+        </div>
+      </div> <!-- /container -->
+	 
+    </main>
+   
+  <footer th:replace="~{layout/layout :: footer}"></footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"></script>
+     <script th:src="@{/tinymce/tinymce.min.js}"></script>
+     <script th:src="@{/script.js}"></script>
+    <script>
+	
+		// Guardamos en una variable una funcion que muestra un cuadro de dialogo de tipo confirm
+		var dialogoConfirm = function (e) {
+			if (!confirm('¿Realmente desea eliminar el registro?')) 
+				e.preventDefault();
+		};
+
+		// Aplicamos a todos los elementos HTML que tengan la clase CSS 'confirmar' el evento click para que muestre el cuadro de dialogo de confirmacion. 
+		document.querySelectorAll('.confirmar').forEach(function(elemento) {
+			elemento.addEventListener('click', dialogoConfirm, false);
+		});
+	
+	</script>
+	</body>
+	</html>

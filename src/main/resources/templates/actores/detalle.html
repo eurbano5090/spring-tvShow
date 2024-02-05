@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xlms:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/layout :: head}"></head>
+<body>
+
+	<header th:replace="~{layout/layout :: header}"></header>
+   
+    <main>
+	<div class="container py-4 bg-secondary">
+
+		<div class="list card ">
+			<div class="card-header" th:text="${titulo}"></div>
+			
+
+			
+           <img class="rounded mx-auto d-block"  th:src="@{'/img-actores/'+ ${actor.imagenPortada}}" 
+              alt="Generic placeholder image" style="max-width:80%">        
+
+				<ul class="list-group">
+				
+					<h4>Nombre</h4><li class="list-group-item" th:text="${actor.nombre}"></li>
+					<h4>apellido</h4><li class="list-group-item" th:text="${actor.apellido}"></li>
+					<h4>Conocido como:</h4><li class="list-group-item" th:text="${actor.username}"></li>
+					<h4>Fecha de Nacimiento</h4><li class="list-group-item" th:text="${actor.fechaNac}"></li>
+					<h4>Detalles</h4><strong><li class="list-group-item" th:text="${actor.detalles}"></strong></li>
+				</ul>
+				
+				</main>
+				<div class="card-body">
+            	<div th:if="${#lists.isEmpty(actor.shows)}"
+					class="alert alert-info my-4"
+					th:text="'No hay peliculas del actor ' + ${actor.nombre} + ' ' + ${actor.apellido}"></div>
+
+				<table th:if="${not #lists.isEmpty(actor.shows)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-dark">
+						<tr>
+							<th>Show id</th>
+							<th>descripción</th>
+							<th>Show Title</th>
+							<th>Network</th>
+							<th>ver</th>
+							<th>eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="show: ${actor.shows}">
+							<td th:text="${show.id}"></td>
+							<td th:text="${show.descripcion}"></td>
+							<td th:text="${show.title}"></td>
+							<td th:text="${show.network}"></td>
+							<td><a class="btn btn-primary btn-sm" th:href="@{'/actores/view/' + ${show.id}}" th:text="'detalle'"></a></td>
+							<td><a class="btn btn-danger btn-sm" th:href="@{'/actores/delete/' + ${show.id}}" th:text="'eliminar'"
+							 onclick="return confirm('¿Estas seguro que desea eliminar el show?');"></a></td>
+						</tr>
+					</tbody> 
+
+				</table>
+				<div class="form-group row">
+					<div class="col-sm-6">
+				    <a th:href="@{/actores/indexPaginate}" class="btn btn-outline-secondary">Atras</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="~{layout/layout :: footer}"></footer>
+</body>
+</html>

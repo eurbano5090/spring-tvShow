@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}"></head>
+<link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+<body>
+
+	<header th:replace="~{layout/layout :: header}"></header>
+
+   <main class="py-4">
+      <div class="container  py-5 col-sm-9 col-12" id="search">
+			 <h3>Encuentra el show que andas buscando.</h3>
+               Puedes buscar por descripcion y categoria.
+          <form class="form-inline col-sm-6" th:action="@{/shows/search}" method="get" th:object="${search}">
+         <input type="text" class="form-control mb-3" th:field="*{descripcion}" id="exampleFormControlInput1" placeholder="Escriba una busqueda">&nbsp;
+          
+             <div>
+             <select th:field="*{categoria.id}" class="custom-select custom-select mb-3">  
+              <option th:value="${null}" selected >Seleccione una categoria</p>
+              <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nombre}" ></option>
+            </select>&nbsp;
+            <button type="submit" class="btn btn-dark mb-3"><i class="icon ion-md-search"></i>Buscar</button>
+           </div>
+          </form>  
+          
+     </div>  
+     </main>
+     <section>
+            
+          <hr>  
+     <div class="container"> 
+        <h2 class="font-weight-bold text-center text-capitalize">Shows</h2>
+        <div th:if="${msg!=null}" class="alert alert-success" th:text="${msg}" role='alert'></div>
+        <hr>
+				<table class="table table-striped">
+					<thead>
+					<tr>
+					<th scope="col">DETALLE</th>
+					<th scope="col">SHOW</th>
+					<th scope="col">NETWORK</th>
+					<th scope="col">DESTACADO</th>
+				</tr>
+					</thead>
+					<tbody>
+					<tr th:each="show:${shows}">
+					<td><a class="btn btn-dark btn-xs" th:href="@{/ver/} + ${show.id}" th:text="${show.id}"></a></td>
+			    <th th:text="${show.id}"/>  
+
+					<td th:text="${show.showTitle}" />
+					<td th:text="${show.showNetwork}" />
+					
+ 		         	<td>
+					<span th:if="${show.destacado ==1}" class="badge bg-success">SI</span>
+					<span th:unless="${show.destacado ==1}" class="badge bg-danger">NO</span>
+					</td> 	
+					<td><a th:href="@{/editar/}+${show.id}" class="btn btn-warning btn-sm">Update</a></td>
+				    <td><a  th:href="@{/eliminar/}+${show.id}" class="btn btn-danger btn-sm">Borrar</a></td>
+						</tr>
+					</tbody>
+
+				</table>
+				<nav th:replace="~{paginator-nav :: paginator}"></nav>
+			</div>
+	
+	
+	</section>
+	<footer th:replace="~{layout/layout :: footer}"></footer>
+</body>
+</html>
